@@ -31,6 +31,9 @@ export class TodosAccess {
                 ':userId': userId
             }
         }).promise()
+        if (!result) {
+            return null
+        }
 
         const items = result.Items
         return items as TodoItem[]
@@ -115,113 +118,3 @@ export class TodosAccess {
         .promise()
     }
 }
-
-
-//   /**
-//    * Checking if an item might already exists
-//    * @param userId
-//    * @param todoId
-//    * @returns Object
-//    */
-//   async isExisting(userId: string, todoId: string): Promise<unknown> {
-//     const itemExist = await docClient
-//       .get({
-//         TableName: databaseTable,
-//         Key: {
-//           userId,
-//           todoId
-//         }
-//       })
-//       .promise();
-//     if (!itemExist) logger.info(`${todoId} - Query failed, item not found`);
-//     return !!itemExist.Item;
-//   }
-
-//   /**
-//    * Generate a new upload url and update DynamoDB with the new url
-//    * @param userId
-//    * @param todoId
-//    * @param attachmentUrl
-//    */
-//   async generateUploadUrl(
-//     userId: string,
-//     todoId: string,
-//     attachmentUrl: string
-//   ): Promise<void> {
-//     if (!(await this.isExisting(userId, todoId))) {
-//       logger.info(`Generate image URL -> Invalid todoId`, {
-//         todoId,
-//         userId,
-//         attachmentUrl
-//       });
-//       throw new Error(`Invalid todo`);
-//     }
-//     const DatabaseSet = await docClient
-//       .update({
-//         TableName: databaseTable,
-//         Key: {
-//           userId,
-//           todoId
-//         },
-//         UpdateExpression: 'set attachmentUrl = :attachmentUrl',
-//         ExpressionAttributeValues: {
-//           ':attachmentUrl': attachmentUrl
-//         }
-//       })
-//       .promise();
-//     logger.info('generateUploadUrl -> ', {
-//       userId,
-//       todoId,
-//       attachmentUrl,
-//       DatabaseSet
-//     });
-//   }
-
-//   /**
-//    * Create new todo
-//    * @param {object} todoItem - todo item data
-//    * @returns {object} - the new todo item
-//    */
-//   async createTodo(todoItem: TodoItem): Promise<TodoItem> {
-//     await docClient
-//       .put({
-//         TableName: databaseTable,
-//         Item: todoItem
-//       })
-//       .promise();
-//     logger.info('New todo item created: ', {
-//       todoItem
-//     });
-//     return todoItem;
-//   }
-
-//   /**
-//    * Get todo list
-//    * @param userId
-//    * @returns {array} - todo item list
-//    */
-//   async getTodos(userId: string): Promise<TodoItem[]> {
-//     const Query = await docClient
-//       .query({
-//         TableName: databaseTable,
-//         IndexName: secondaryIndex,
-//         KeyConditionExpression: 'userId = :userId',
-//         ExpressionAttributeValues: {
-//           ':userId': userId
-//         }
-//       })
-//       .promise();
-//     if (!Query) throw new Error(`Failed, try again!`);
-//     const todosList = Query.Items;
-//     logger.info(`Get user todos ->`, {
-//       todos: todosList as TodoItem[]
-//     });
-//     return todosList as TodoItem[];
-//   }
-
-//   /**
-//    * Delete todo item
-//    * @param userId
-//    * @param todoId
-//    */
-// }

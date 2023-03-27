@@ -72,7 +72,7 @@ async function verifyToken(authHeader: string): Promise<JwtPayload> {
   // collect the signing key
   const signingKey = (signingKeys.x5c[0])
   // convert the PEM cert to cert
-  const cert = 'n-----BEGIN CERTIFICATE-----n' + signingKey + 'n-----END CERTIFICATE-----n'
+  const cert = '-----BEGIN CERTIFICATE-----\n' + signingKey + '\n-----END CERTIFICATE-----\n'
   // verify the signature of the JWT token to ensure it's really coming from User Pool
   const verifiedToken = verify(token, cert, { algorithms: ['RS256'] }) as JwtPayload
   logger.info('verifiedToken', verifiedToken)

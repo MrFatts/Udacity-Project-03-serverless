@@ -63,8 +63,8 @@ export async function updateTodo (
 
 //write the function to delete a todo item
 export async function deleteTodo (
-    userId: string,
-    todoId: string
+    todoId: string,
+    userId: string
 ): Promise<string> {
     logger.info('delete a todo item ', {
         userId, 

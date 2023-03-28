@@ -8,22 +8,25 @@ const XAWS = AWSXRay.captureAWS(AWS)
 // }
 // TODO: implement the business logic of the attachmentUtils
 const s3BucketName = process.env.ATTACHMENT_S3_BUCKET
-const urlExpire = process.env.SIGNED_URL_EXPIRATION
+const urlExpire = 300
 //const target = new XAWS.S3({ signatureVersion: 'v4' })
 
 export class Attachmentutils {
 	constructor(
 		private readonly s3bucket = new XAWS.S3({ signatureVersion: 'v4' }),
-		private readonly Nameofbucket = s3BucketName,
+		private readonly nameOfBucket = s3BucketName,
+		
+		
 	) {}
 
-	getAttachmentUrl(todoId: string) {
-		return `https://${this.Nameofbucket}.s3.amazonaws.com/${todoId}`
+	getAttachmentUrl(todoId: string): string {
+		return `https://${this.nameOfBucket}.s3.amazonaws.com/${todoId}`
 	}
 
 	getUploadUrl(todoId: string): string {
+		console.log('getUploadUrl')
 		const url = this.s3bucket.getSignedUrl('putObject', {
-			Bucket: this.Nameofbucket,
+			Bucket: this.nameOfBucket,
 			Key: todoId,
 			Expires: urlExpire
 		})
